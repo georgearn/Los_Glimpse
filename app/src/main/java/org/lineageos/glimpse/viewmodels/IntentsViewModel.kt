@@ -236,7 +236,7 @@ class IntentsViewModel(application: Application) : GlimpseViewModel(application)
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val isPicking = parsedIntent
-        .mapLatest { it is ParsedIntent.PickIntent }
+        .mapLatest { it is ParsedIntent.PickIntent || it is ParsedIntent.SetWallpaperIntent }
         .flowOn(Dispatchers.IO)
         .stateIn(
             viewModelScope,
@@ -252,6 +252,7 @@ class IntentsViewModel(application: Application) : GlimpseViewModel(application)
         .mapLatest {
             when (it) {
                 is ParsedIntent.PickIntent -> it.multiple
+                is ParsedIntent.SetWallpaperIntent -> false
                 else -> true
             }
         }

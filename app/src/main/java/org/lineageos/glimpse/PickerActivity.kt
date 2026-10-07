@@ -103,6 +103,10 @@ class PickerActivity : AppCompatActivity(R.layout.activity_picker) {
                         )
                     }
 
+                    is IntentsViewModel.ParsedIntent.SetWallpaperIntent -> {
+                        toolbar.setTitle(R.string.pick_a_photo)
+                    }
+
                     else -> {
                         Toast.makeText(
                             this, R.string.intent_action_not_supported, Toast.LENGTH_SHORT
