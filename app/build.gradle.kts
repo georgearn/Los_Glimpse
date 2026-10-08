@@ -20,8 +20,27 @@ android {
         versionName = "1.0"
     }
 
+    val keystoreFile = System.getenv("ANDROID_KEYSTORE_FILE")
+
+    signingConfigs {
+        if (keystoreFile != null) {
+            create("fixed") {
+                storeFile = file(keystoreFile)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = if (keystoreFile != null) {
+                signingConfigs.getByName("fixed")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+
             // Enables code shrinking, obfuscation, and optimization.
             isMinifyEnabled = true
 
