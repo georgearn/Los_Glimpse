@@ -29,6 +29,7 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -45,6 +46,7 @@ import org.lineageos.glimpse.ext.createFavoriteRequest
 import org.lineageos.glimpse.ext.createTrashRequest
 import org.lineageos.glimpse.ext.fade
 import org.lineageos.glimpse.ext.setBarsVisibility
+import org.lineageos.glimpse.ext.trashBinEnabled
 import org.lineageos.glimpse.models.Album
 import org.lineageos.glimpse.models.AlbumType
 import org.lineageos.glimpse.models.Media
@@ -84,6 +86,9 @@ class ViewActivity : AppCompatActivity(R.layout.activity_view) {
 
     // System services
     private val keyguardManager by lazy { getSystemService(KeyguardManager::class.java) }
+
+    private val trashBinEnabled
+        get() = PreferenceManager.getDefaultSharedPreferences(this).trashBinEnabled
 
     private var lastVideoUriPlayed: Uri? = null
 
@@ -281,7 +286,13 @@ class ViewActivity : AppCompatActivity(R.layout.activity_view) {
         deleteButton.setOnClickListener {
             viewModel.displayedMedia.value?.let {
                 dismissKeyguardAndRun {
-                    trashMedia(it)
+                    if (trashBinEnabled || it.isTrashed) {
+                        trashMedia(it)
+                    } else {
+                        MediaDialogsUtils.openDeleteForeverDialog(this, it.uri) { uris ->
+                            deleteUriContract.launch(contentResolver.createDeleteRequest(*uris))
+                        }
+                    }
                 }
             }
         }
@@ -458,9 +469,10 @@ class ViewActivity : AppCompatActivity(R.layout.activity_view) {
 
                     // Update delete button
                     val isTrashed = displayedMedia?.isTrashed ?: false
-                    deleteButton.text = when (isTrashed) {
-                        true -> getString(R.string.file_action_restore_from_trash)
-                        false -> getString(R.string.file_action_move_to_trash)
+                    deleteButton.text = when {
+                        isTrashed -> getString(R.string.file_action_restore_from_trash)
+                        trashBinEnabled -> getString(R.string.file_action_move_to_trash)
+                        else -> getString(R.string.file_action_delete_forever)
                     }
                     deleteButton.setCompoundDrawablesWithIntrinsicBounds(
                         0,

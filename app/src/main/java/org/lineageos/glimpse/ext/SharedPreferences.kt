@@ -23,6 +23,15 @@ var SharedPreferences.manageMediaPermissionDialogDismissed: Boolean
         putBoolean(MANAGE_MEDIA_PERMISSION_DIALOG_DISMISSED_KEY, value)
     }
 
+// Trash bin (when disabled, deleting a media removes it permanently)
+private const val TRASH_BIN_ENABLED_KEY = "trash_bin_enabled"
+private const val TRASH_BIN_ENABLED_DEFAULT = true
+var SharedPreferences.trashBinEnabled: Boolean
+    get() = getBoolean(TRASH_BIN_ENABLED_KEY, TRASH_BIN_ENABLED_DEFAULT)
+    set(value) = edit {
+        putBoolean(TRASH_BIN_ENABLED_KEY, value)
+    }
+
 // Double-tap to seek video
 private const val DOUBLE_TAP_SEEK_ENABLED_KEY = "double_tap_to_seek_enabled"
 private const val DOUBLE_TAP_SEEK_ENABLED_DEFAULT = false

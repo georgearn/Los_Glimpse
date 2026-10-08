@@ -9,13 +9,16 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import org.lineageos.glimpse.R
 import org.lineageos.glimpse.ext.getViewProperty
+import org.lineageos.glimpse.ext.trashBinEnabled
 import org.lineageos.glimpse.models.AlbumType
 import org.lineageos.glimpse.models.MediaType
 import org.lineageos.glimpse.ui.views.ListItem
@@ -62,6 +65,14 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
         trashAlbumListItem.setOnClickListener {
             openAlbum(AlbumType.TRASH)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        trashAlbumListItem.isVisible = PreferenceManager.getDefaultSharedPreferences(
+            requireContext()
+        ).trashBinEnabled
     }
 
     private fun openAlbum(

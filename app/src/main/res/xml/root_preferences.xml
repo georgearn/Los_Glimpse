@@ -17,6 +17,13 @@
             app:summary="@string/edge_tap_navigation_enabled_description"
             app:title="@string/edge_tap_navigation_enable_title" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="trash_bin_enabled"
+            app:summary="@string/trash_bin_enabled_description"
+            app:title="@string/trash_bin_enabled_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

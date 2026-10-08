@@ -144,6 +144,8 @@
     <!-- General preferences -->
     <string name="edge_tap_navigation_enable_title">Edge tap navigation</string>
     <string name="edge_tap_navigation_enabled_description">Tap left or right edge of screen to navigate between media</string>
+    <string name="trash_bin_enabled_title">Trash bin</string>
+    <string name="trash_bin_enabled_description">Move deleted media to the trash bin. When turned off, deleted media is removed permanently</string>
 
     <!-- Video preferences -->
     <string name="double_tap_to_seek_enabled_title">Enable double-tap to seek</string>
