@@ -1,6 +1,9 @@
 name: build
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [lineage-23.2]
+  workflow_dispatch:
 
 jobs:
   build:
